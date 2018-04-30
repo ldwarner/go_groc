@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <link rel="stylesheet" type="text/css" href="go_groc_style.css">
+
+    <link rel="shortcut icon" href="go_groc_favicon.ico"/>
+    <meta charset="UTF-8">
+    <title>Gopher Grocery</title>
+    <style>
+
+        li a.nav1 {
+            display: block;
+            color: #808080;
+            padding: 5px;
+            margin: 13px 0px 13px 30px;
+            font-family: gravityRegular, sans-serif;
+            text-align: center;
+            transition: color 0.6s ease;
+        }
+
+        li a:hover{
+            color: #0DB14B;
+        }
+
+        .nav_2_container{
+            padding: 5px 40px;
+            background-color: white;
+            width: 240px;
+            height: 100%;
+            float: left;
+            position: fixed;
+            margin-top: 45px;
+
+        }
+
+        .nav_2{
+            color: #808080;
+            font-family: gravityRegular, sans-serif;
+            list-style-type: none;
+        }
+
+        .nav_2 li{
+            float: none;
+
+        }
+        .nav_2 li a{
+            text-decoration: none;
+            color: #808080;
+            font-family: gravityBold, sans-serif;
+            text-align: left;
+            transition: color 0.6s ease;
+        }
+
+        .nav_2 li a:hover{
+            color: #0DB14B;
+        }
+
+        #current_link{
+            color: #0DB14B;
+        }
+
+        h1{
+            font-family: gravityBold, sans-serif;
+            font-size: 23px;
+            margin: 30px 7px 10px;
+            color: #808080;
+        }
+
+        h2{
+            font-family: gravityBold, sans-serif;
+            font-size: 20px;
+            margin: 30px 0px 10px;
+            color: #A7A9AC;
+        }
+
+        .items_wrapper{
+            width: 940px;
+            position: relative;
+            margin-left: 300px;
+            padding: 45px;
+        }
+
+        .items_container {
+            position: sticky;
+            text-align: center;
+            width: 190px;
+            height: 220px;
+            margin: 7px;
+            color: #808080;
+            font-family: gravityRegular, sans-serif;
+            font-size: 12px;
+            float: left;
+            background-color: white;
+
+        }
+
+        .bottom-left {
+            position: relative;
+            bottom: 0px;
+            left: 15px;
+            text-align: left;
+        }
+
+        .bottom {
+            position: absolute;
+            bottom: 80px;
+            left: 50%;
+        }
+
+        p.price{
+            font-family: gravityRegular, sans-serif;
+            font-size: 18px;
+            margin: 0;
+            text-align: left;
+        }
+
+
+
+        p{
+            font-family: gravityRegular, sans-serif;
+            font-size: 12px;
+            text-align: center;
+            color: #808080;
+            margin-top: 25px;
+        }
+
+        p a{
+            color: #0DB14B;
+        }
+        p a:hover{
+            text-decoration:underline;
+        }
+
+
+        /*Cart modal*/
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 1600px;
+            height: 100%;
+            margin: 0 auto;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+            -webkit-animation-name: fadeIn;
+            -webkit-animation-duration: 0.4s;
+            animation-name: fadeIn;
+            animation-duration: 0.4s;
+        }
+
+        .modal-content {
+            position: fixed;
+            right: 0;
+            background-color: #fefefe;
+            width: 500px;
+            height: 100%;
+            -webkit-animation-name: slideIn;
+            -webkit-animation-duration: 0.4s;
+            animation-name: slideIn;
+            animation-duration: 0.4s;
+            overflow: auto;
+        }
+
+        .close {
+            color: #A7A9AC;
+            float: left;
+            font-size: 28px;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #808080;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .close2{
+            color: #A7A9AC;
+            float: left;
+            font-size: 28px;
+        }
+
+        .close2:hover,
+        .close2:focus {
+            color: #808080;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+
+        .modal-header {
+            height: 70px;
+            width: 500px;
+            padding: 2px 10px;
+            background-color: white;
+            color: #079C42;
+            text-align: center;
+            font-family: gravityBold, sans-serif;
+            font-size: 20px;
+            position: fixed;
+            border-bottom: 1px solid #808080;
+
+        }
+
+        .modal-body {padding: 2px 16px;}
+
+
+        /* Add Animation */
+        @-webkit-keyframes slideIn {
+            from {right: -300px; opacity: 0}
+            to {bottom: 0; opacity: 1}
+        }
+
+        @keyframes slideIn {
+            from {right: -300px; opacity: 0}
+            to {right: 0; opacity: 1}
+        }
+
+        @-webkit-keyframes fadeIn {
+            from {opacity: 0}
+            to {opacity: 1}
+        }
+
+        @keyframes fadeIn {
+            from {opacity: 0}
+            to {opacity: 1}
+        }
+
+        #checkout_back{
+            width: 500px;
+            height: 65px;
+            background-color: white;
+            bottom: 0px;
+            position: fixed;
+        }
+
+        #items{
+            width: 500px;
+            height: 100% - 65px;
+            padding: 70px 0px;
+        }
+
+        #checkout{
+            width: 480px;
+            height: 45px;
+            font-family: gravityBold, sans-serif;
+            font-size: 18px;
+            text-align: center;
+            border-radius: 5px;
+            background-color: #0DB14B;
+            color: white;
+            border: none;
+            display: block;
+            bottom: 0px;
+            vertical-align: middle;
+            line-height: 45px;
+            position: fixed;
+            margin: 10px;
+            outline: none;
+        }
+
+        #checkout:hover{
+            background-color: #079C42;
+            transition: 0.4s ease;
+        }
+
+        .cartitem{
+            position: static;
+            width: 500px;
+            height: 100px;
+            background-color: white;
+            border-top: 1px solid white;
+            border-bottom: 1px solid #808080;
+        }
+        .cartimage{
+            width: 80px;
+            height: 80px;
+            margin: 10px;
+            float: left;
+            border: 1px solid #808080;
+            margin-left: 20px;
+
+        }
+
+        .carttitle{
+            width: 140px;
+            height: 100px;
+            margin-left: 30px;
+            float: left;
+            border: none;
+            font-family: gravityRegular, sans-serif;
+            font-size: 16px;
+            color: #808080;
+            vertical-align: middle;
+            line-height: 100px;
+
+        }
+
+        .add{
+            width: 35px;
+            height: 35px;
+            float: left;
+            background-color: white;
+            border: none;
+            border-radius: 5px;
+            font-family: gravityBold, sans-serif;
+            font-size: 18px;
+            color: #808080;
+            text-align: center;
+            vertical-align: middle;
+            line-height: 35px;
+            margin-top: 32px;
+
+        }
+
+        .cartnumber{
+            width: 35px;
+            height: 35px;
+            float: left;
+            background-color: #E6E7E8;
+            border: none;
+            border-radius: 5px;
+            font-family: gravityBold, sans-serif;
+            font-size: 16px;
+            color: #808080;
+            text-align: center;
+            vertical-align: middle;
+            line-height: 35px;
+            margin-top: 32px;
+        }
+
+        .cartprice{
+            width: 40px;
+            height: 100px;
+            margin-left: 30px;
+            float: left;
+            border: none;
+            font-family: gravityRegular, sans-serif;
+            font-size: 14px;
+            color: #808080;
+            vertical-align: middle;
+            line-height: 100px;
+
+        }
+
+        img{
+            width: 165px;
+            height: 165px;
+        }
+
+        .add_cart {
+            transition: .5s ease;
+            opacity: 0;
+            position: absolute;
+            top: 160px;
+            left: 150px;
+            transform: translate(-50%, -50%);
+            -ms-transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .items_container:hover .add_cart {
+            opacity: 1;
+        }
+
+        .text_add_cart {
+            background-color: #4CAF50;
+            color: white;
+            font-size: 14px;
+            padding: 8px 10px 10px 10px;
+            border-radius: 5px;
+        }
+
+        .text_add_cart:hover{
+            background-color: #079C42;
+        }
+v
+
+    </style>
+</head>
+<body>
+
+<div class="wrapper">
+
+    <div id="overlay">
+        <div id="pop_up">
+            <a onclick="off()"><div class="close2">&times;</div></a>
+            <img src="gopher_groc_logo.png" style="height:60px; width:auto; display:block; margin:auto; margin-top:50px">
+            <input id="zip" type="text" placeholder="Enter zip code">
+            <button id="start_shop" onclick="off()">Start Shopping</button>
+            <p>Already have an account? <a onclick="off()">Log in</a></p>
+
+        </div>
+    </div>
+
+    <nav>
+       <a href="index.html"><img class="logo" src="gopher_groc_logo.png"/></a>
+        <ul>
+            <li><input type="text" placeholder="Search departments...">
+                </input></li>
+            <li><a class="nav1" onclick="on()">Delivery to 55414</a></li>
+            <li><a class="nav1">Login</a></li>
+            <li style="float:right" id="myBtn"><button><img style="float: left; height: 22px; width: auto" src="noun_1177232_cc.png">Cart</button></li>
+        </ul>
+    </nav>
+
+    <div class="nav_2_container">
+        <h2>Departments</h2>
+        <ul class="nav_2">
+            <li><a class="nav_2">Produce</a></li>
+            <li><a class="nav_2">Dairy</a></li>
+            <li><a class="nav_2">Frozen</a></li>
+            <li><a class="nav_2">Snacks</a></li>
+            <li><a class="nav_2">Canned Goods</a></li>
+            <li><a class="nav_2">Deli</a></li>
+            <li><a class="nav_2">Pantry</a></li>
+            <li><a class="nav_2">Meat & Seafood</a></li>
+            <li><a class="nav_2">Beverages</a></li>
+            <li><a class="nav_2" id="current_link" href="canned_goods.html">Dry Goods</a></li>
+            <li><a class="nav_2">Bakery</a></li>
+            <li><a class="nav_2">International</a></li>
+            <li><a class="nav_2">Condiments</a></li>
+            <li><a class="nav_2">Kitchen & Household</a></li>
+        </ul>
+
+    </div>
+
+    <div class="items_wrapper">
+        <h1>Departments &ensp;<img src="arrow_darkgray.svg" style="width:auto; height:15px">&ensp;<a id="current_link" href="canned_goods.html" style="text-decoration: none"> Dry Goods</a></h1>
+        <div class="items_container">
+            <img src="dry_goods/dry_good_image_edits.jpg"/>
+            <div class="bottom-left"><p class="price">$0.00</p>Annie's Aged Cheddar Pasta
+            </div>
+            <div class="add_cart">
+                <div class="text_add_cart">+Add</div>
+            </div>
+        </div>
+        <div class="items_container">
+            <img src="dry_goods/dry_good_image_edits2.jpg"/>
+            <div class="bottom-left"><p class="price">$0.00</p>Annie's White Cheddar Pasta</div>
+            <div class="add_cart">
+                <div class="text_add_cart">+Add</div>
+            </div>
+        </div>
+        <div class="items_container">
+            <img src="dry_goods/dry_good_image_edits3.jpg"/>
+            <div class="bottom-left"><p class="price">$0.00</p>Short Grain Brown Rice</div>
+            <div class="add_cart">
+                <div class="text_add_cart">+Add</div>
+            </div>
+        </div>
+        <div class="items_container">
+            <img src="dry_goods/dry_good_image_edits4.jpg"/>
+            <div class="bottom-left"><p class="price">$0.00</p>Cheerios Original Cereal</div>
+            <div class="add_cart">
+                <div class="text_add_cart">+Add</div>
+            </div>
+        </div>
+        <div class="items_container">
+            <img src="dry_goods/dry_good_image_edits5.jpg"/>
+            <div class="bottom-left"><p class="price">$0.00</p>Cinnamon Toast Crunch</div>
+            <div class="add_cart">
+                <div class="text_add_cart">+Add</div>
+            </div>
+        </div>
+        <div class="items_container">
+            <img src="dry_goods/dry_good_image_edits6.jpg"/>
+            <div class="bottom-left"><p class="price">$0.00</p>Organic Fusili Pasta</div>
+            <div class="add_cart">
+                <div class="text_add_cart">+Add</div>
+            </div>
+        </div>
+        <div class="items_container">
+            <img src="dry_goods/dry_good_image_edits7.jpg"/>
+            <div class="bottom-left"><p class="price">$0.00</p>Organic Green Lentils</div>
+            <div class="add_cart">
+                <div class="text_add_cart">+Add</div>
+            </div>
+        </div>
+        <div class="items_container">
+            <img src="dry_goods/dry_good_image_edits8.jpg"/>
+            <div class="bottom-left"><p class="price">$0.00</p>Honey Bunches of Oats</div>
+            <div class="add_cart">
+                <div class="text_add_cart">+Add</div>
+            </div>
+        </div>
+        <div class="items_container">
+            <img src="dry_goods/dry_good_image_edits9.jpg"/>
+            <div class="bottom-left"><p class="price">$0.00</p>Short Grain Jasmine Rice</div>
+            <div class="add_cart">
+                <div class="text_add_cart">+Add</div>
+            </div>
+        </div>
+        <div class="items_container">
+            <img src="dry_goods/dry_good_image_edits10.jpg"/>
+            <div class="bottom-left"><p class="price">$0.00</p>Lucky Charms Cereal</div>
+            <div class="add_cart">
+                <div class="text_add_cart">+Add</div>
+            </div>
+        </div>
+        <div class="items_container">
+            <img src="dry_goods/dry_good_image_edits11.jpg"/>
+            <div class="bottom-left"><p class="price">$0.00</p>Organic Orzo Pasta</div>
+            <div class="add_cart">
+                <div class="text_add_cart">+Add</div>
+            </div>
+        </div>
+        <div class="items_container">
+            <img src="dry_goods/dry_good_image_edits12.jpg"/>
+            <div class="bottom-left"><p class="price">$0.00</p>Barilla Penne Pasta</div>
+            <div class="add_cart">
+                <div class="text_add_cart">+Add</div>
+            </div>
+        </div>
+        <div class="items_container">
+            <img src="dry_goods/dry_good_image_edits13.jpg"/>
+            <div class="bottom-left"><p class="price">$0.00</p>Organic Quinoa</div>
+            <div class="add_cart">
+                <div class="text_add_cart">+Add</div>
+            </div>
+        </div>
+        <div class="items_container">
+            <img src="dry_goods/dry_good_image_edits14.jpg"/>
+            <div class="bottom-left"><p class="price">$0.00</p>Raisin Bran Cereal</div>
+            <div class="add_cart">
+                <div class="text_add_cart">+Add</div>
+            </div>
+        </div>
+        <div class="items_container">
+            <img src="dry_goods/dry_good_image_edits15.jpg"/>
+            <div class="bottom-left"><p class="price">$0.00</p>Organic Red Lentils</div>
+            <div class="add_cart">
+                <div class="text_add_cart">+Add</div>
+            </div>
+        </div>
+        <div class="items_container">
+            <img src="dry_goods/dry_good_image_edits3.jpg"/>
+            <div class="bottom-left"><p class="price">$0.00</p>Short Grain Brown Rice</div>
+            <div class="add_cart">
+                <div class="text_add_cart">+Add</div>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="myModal" class="modal">
+
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="close">&times;</span>
+                <h2>Cart</h2>
+            </div>
+
+           <div id="items">
+            <div class="cartitem" style="border-top: 1px solid #808080">
+                <div class="cartimage"></div>
+                <div class="carttitle">Item name</div>
+                <div class="add">-</div><div class="cartnumber">1</div><div class="add">+</div>
+                <div class="cartprice">$0.00</div>
+
+            </div>
+            <div class="cartitem">
+                <div class="cartimage"></div>
+                <div class="carttitle">Item name</div>
+                <div class="add">-</div><div class="cartnumber">1</div><div class="add">+</div>
+                <div class="cartprice">$0.00</div>
+
+            </div>
+            <div class="cartitem">
+                <div class="cartimage"></div>
+                <div class="carttitle">Item name</div>
+                <div class="add">-</div><div class="cartnumber">1</div><div class="add">+</div>
+                <div class="cartprice">$0.00</div>
+
+            </div>
+            <div class="cartitem">
+                <div class="cartimage"></div>
+                <div class="carttitle">Item name</div>
+                <div class="add">-</div><div class="cartnumber">1</div><div class="add">+</div>
+                <div class="cartprice">$0.00</div>
+
+            </div>
+            <div class="cartitem">
+                <div class="cartimage"></div>
+                <div class="carttitle">Item name</div>
+                <div class="add">-</div><div class="cartnumber">1</div><div class="add">+</div>
+                <div class="cartprice">$0.00</div>
+
+            </div>
+            <div class="cartitem">
+                <div class="cartimage"></div>
+                <div class="carttitle">Item name</div>
+                <div class="add">-</div><div class="cartnumber">1</div><div class="add">+</div>
+                <div class="cartprice">$0.00</div>
+
+            </div>
+            <div class="cartitem">
+                <div class="cartimage"></div>
+                <div class="carttitle">Item name</div>
+                <div class="add">-</div><div class="cartnumber">1</div><div class="add">+</div>
+                <div class="cartprice">$0.00</div>
+
+            </div>
+            <div class="cartitem">
+                <div class="cartimage"></div>
+                <div class="carttitle">Item name</div>
+                <div class="add">-</div><div class="cartnumber">1</div><div class="add">+</div>
+                <div class="cartprice">$0.00</div>
+
+            </div>
+
+           </div>
+
+            <div id="checkout_back">
+            <div id="checkout">
+                Checkout
+            </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+<script>
+    function on() {
+        document.getElementById("overlay").style.display = "block";
+    }
+
+    function off() {
+        document.getElementById("overlay").style.display = "none";
+    }
+
+    var modal = document.getElementById('myModal');
+    var btn = document.getElementById("myBtn");
+    var span = document.getElementsByClassName("close")[0];
+
+    btn.onclick = function() {
+        modal.style.display = "block";
+    }
+    span.onclick = function() {
+        modal.style.display = "none";
+    }
+
+    window.onclick = function(event) {
+        if (event.target == overlay) {
+            overlay.style.display = "none";
+        }
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+
+    }
+
+</script>
+
+</body>
+</html>
